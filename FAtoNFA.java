@@ -8,6 +8,8 @@ import java.util.Scanner;
 import javax.swing.Spring;
 import javax.swing.text.Document;
 
+import com.sun.net.httpserver.Authenticator.Result;
+
 
 
 
@@ -203,7 +205,7 @@ public class FAtoNFA {
 
 	private boolean IfCaozuoshu(char c) {
 		byte b = (byte) c;
-        if ((b >= 97 && b <= 122) || (b >= 65 && b <= 90)) {
+        if ((b >= 97 && b <= 122) || (b >= 65 && b <= 90)||(b>=48 &&b<=57)) {
         	return true;
         }
 		return false;
@@ -221,11 +223,17 @@ public class FAtoNFA {
 
 	public GenerateNFAMethod generator = new GenerateNFAMethod();
 
+	public class inputException extends Exception {
+	    public inputException(String msg)
+	    {
+	        super(msg);
+	    }
+	}
 
-	public String Init(String re) {
+	public String Init(String re) throws Exception{
 		String result=new String();
 		if (re.length()==0)
-			return null;
+			throw new inputException("输入不能为空");		
 		for (int i = 0; i < re.length(); i++) {
 			char c=re.charAt(i);
 			if(IfCaozuofu(c)||IfCaozuoshu(c)) {
@@ -234,7 +242,7 @@ public class FAtoNFA {
 				
 			}
 			else
-				return null;
+				throw new inputException("输入字符不符合要求");	
 		}
 
 		StringBuffer sb = new StringBuffer(); 
@@ -273,7 +281,7 @@ public class FAtoNFA {
 		return result;
 	}
 
-	public String toSuffix(String re) {
+	public String toSuffix(String re) throws Exception {
 		SymbolStack transStack =new SymbolStack();
 		String result=new String();
 		for(int i=0;i<re.length();i++) {
@@ -308,9 +316,6 @@ public class FAtoNFA {
 						result+=""+transStack.Pop();
 					}
 				}
-			}
-			else {
-				throw new RuntimeException("�Ƿ�");
 			}
 		}
 		while(transStack.top.currentSymbol!=0) {
@@ -381,12 +386,25 @@ public class FAtoNFA {
 		FAtoNFA tonfa= new FAtoNFA();
 		Scanner input=new Scanner(System.in); 
 		String str=input.next();
-		return tonfa.Init(str);
+		String result = null;
+		try {
+			result=tonfa.Init(str);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			return result;
+		}
 	}
 //	public static void main(String args[]) {
 //		FAtoNFA tonfa= new FAtoNFA();
 //		Scanner input=new Scanner(System.in); 
 //		String str=input.next();
-//		tonfa.Init(str);			
+//		try {
+//			System.out.print(tonfa.Init(str));
+//		} catch (Exception e) {
+//			System.out.println("输入不正确");
+//			e.printStackTrace();
+//		}		
 //	}
 }
