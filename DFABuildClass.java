@@ -1,5 +1,3 @@
-package tonfa;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -94,59 +92,59 @@ public class DFABuildClass {
         return -1;
     }
 
-    public static void main(String[] args) {
-    	String NFAstr=FAtoNFA.genarateNFA();
-    	BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(NFAstr.getBytes(Charset.forName("utf8"))), Charset.forName("utf8")));
+    static String gennarateDFA() {
+        String NFAstr=FAtoNFA.genarateNFA();
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(NFAstr.getBytes(Charset.forName("utf8"))), Charset.forName("utf8")));
         //将NFA分解
         NFA nfa = new NFA();
         //Scanner sc = new Scanner(System.in);
         NFANode node;
         String str;
         System.out.println(NFAstr);
-    	
+
         //2020.12.5更改   没有注意中间符号的问题
         //加上中间符号数组
         ArrayList<String> path_chars = new ArrayList<>();
         //将NFA分解
         String path_char;
-		try {
-			while ((str=br.readLine())!= null) {
-			    if (str.length() == 0)
-			        break;
-			    String[] strArr = str.split(" ");
-			    node = new NFANode(strArr[0]);
-			    int index = nfa.find(node.NodeName);
-			    if (index == -1) {
-			        index = nfa.nodeList.size();
-			        nfa.nodeList.add(node);
-			    }
-			    node = nfa.nodeList.get(index);
-			    if (str.length() >= 4) {
-			        for (int i = 1; i < strArr.length; i++) {
+        try {
+            while ((str=br.readLine())!= null) {
+                if (str.length() == 0)
+                    break;
+                String[] strArr = str.split(" ");
+                node = new NFANode(strArr[0]);
+                int index = nfa.find(node.NodeName);
+                if (index == -1) {
+                    index = nfa.nodeList.size();
+                    nfa.nodeList.add(node);
+                }
+                node = nfa.nodeList.get(index);
+                if (str.length() >= 4) {
+                    for (int i = 1; i < strArr.length; i++) {
 //                    node.pathChar.add(strArr[i].charAt(2));   这里由于符号不一定为一个字符，所以进行更改
-			            path_char = strArr[i].split("-")[1];
-			            node.pathChar.add(path_char);
-			            //建立好中间符号集
-			            //去掉~
-			            if (!path_char.equals("~")&&!path_chars.contains(path_char))
-			            {
-			                path_chars.add(path_char);
-			            }
-			            String tempStr = strArr[i].split("-")[2].substring(1);
-			            //末状态用分割的最后一个字符，并去掉'>'
-			            int temp = nfa.find(tempStr);
-			            if (temp == -1) {
-			                temp = nfa.nodeList.size();
-			                nfa.nodeList.add(new NFANode(tempStr));
-			            }
-			            node.nextNodes.add(nfa.nodeList.get(temp));
-			        }
-			    }
-			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+                        path_char = strArr[i].split("-")[1];
+                        node.pathChar.add(path_char);
+                        //建立好中间符号集
+                        //去掉~
+                        if (!path_char.equals("~")&&!path_chars.contains(path_char))
+                        {
+                            path_chars.add(path_char);
+                        }
+                        String tempStr = strArr[i].split("-")[2].substring(1);
+                        //末状态用分割的最后一个字符，并去掉'>'
+                        int temp = nfa.find(tempStr);
+                        if (temp == -1) {
+                            temp = nfa.nodeList.size();
+                            nfa.nodeList.add(new NFANode(tempStr));
+                        }
+                        node.nextNodes.add(nfa.nodeList.get(temp));
+                    }
+                }
+            }
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         //将分解好的NFA转换成DFA
         DFA dfa = new DFA();
         ArrayList<ArrayList<NFANode>> totalList = new ArrayList<>();
@@ -229,28 +227,37 @@ public class DFABuildClass {
 //            System.out.println("");
 //        }
         //将DFA输出
+        String result;
         String c;
         int total=dfa.dfaStateList.size();
         c = dfa.dfaStateList.get(0);
-        System.out.print(c);
+        result = c ;
+        // System.out.print(c);
         for(int m=0;m<dfa.sigma.size();m++){
-                System.out.print( " "+c+ "-"+dfa.sigma.get(m) + "-" + dfa.dfaStateList.get(dfa.tansList.get(0).get(m)));
+            result += " "+c+"-"+dfa.sigma.get(m)+"->"+dfa.dfaStateList.get(dfa.tansList.get(0).get(m));
         }
-        System.out.println("");
+        // System.out.println("");
+        result+="\n";
         c = dfa.dfaStateList.get(total-1);
-        System.out.print(c);
+        // System.out.print(c);
+        result+=c;
         for(int m=0;m<dfa.sigma.size();m++){
-            System.out.print( " "+c+ "-"+dfa.sigma.get(m) + "-" + dfa.dfaStateList.get(dfa.tansList.get(total-1).get(m)));
+            result = result+" "+c+"-"+dfa.sigma.get(m)+"->"+dfa.dfaStateList.get(dfa.tansList.get(total-1).get(m));
         }
-        System.out.println("");
+        // System.out.println("");
+        result+="\n";
         for (i = 1; i < total-1; i++) {
             c=dfa.dfaStateList.get(i);
-            System.out.print(c);
+            // System.out.print(c);
+            result+=c;
             for(int m=0;m<dfa.sigma.size();m++){
-                System.out.print( " "+c+ "-"+dfa.sigma.get(m) + "-" + dfa.dfaStateList.get(dfa.tansList.get(i).get(m)));
+                result = result+" "+c+"-"+dfa.sigma.get(m)+"->"+dfa.dfaStateList.get(dfa.tansList.get(i).get(m));
             }
-            System.out.println("");
+            // System.out.println("");
+            result+="\n";
         }
+        System.out.print(result);
+        return result;
     }
 }
 
