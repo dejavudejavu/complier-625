@@ -5,6 +5,7 @@
 + NFA->DFA  
 + DFA化简
 + 基于DFA的单词识别  
+
 输入  
 `(a|b)*abb`  
  
