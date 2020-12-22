@@ -10,5 +10,5 @@
 `(a|b)*abb`  
  
 结果：  
-![结果](test1.png)
+![结果](test1.jpg)
 
