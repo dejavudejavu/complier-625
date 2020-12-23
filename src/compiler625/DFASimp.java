@@ -1,4 +1,4 @@
-package tonfa;
+package compiler625;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
