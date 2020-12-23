@@ -21,18 +21,18 @@ public class FAtoNFA {
 	int reLength;
 	public int num=-1;
 	
-	//״̬�ڵ�
+	//状态锟节碉拷
 	public class NFANode{
-	      public String stateNum;//��ǰ״̬�ڵ��־
-	      public char pathChar;//ǰһ״̬����ǰ״̬�����ַ�
-	      public List<NFANode> nextNodes;//��̽ڵ㼯��
+	      public String stateNum;//锟斤拷前状态锟节碉拷锟街�
+	      public char pathChar;//前一状态锟斤拷锟斤拷前状态锟斤拷锟斤拷锟街凤拷
+	      public List<NFANode> nextNodes;//锟斤拷探诘慵拷锟�
 	      NFANode(String stateNum,char pathChar) {
 	    	  this.stateNum=stateNum;
 	    	  this.pathChar=pathChar;
 	    	  nextNodes = new LinkedList<>();
 	      }
 	  }
-	//NFAͼ
+	//NFA图
 	public class NFA{
 	      public NFANode headNode;
 	      public NFANode tailNode;
@@ -44,7 +44,7 @@ public class FAtoNFA {
 	    	  this.tailNode=tailNode;
 	      }   
 	  }
-	//����ջ
+	//锟斤拷锟斤拷栈
 	public class SymbolNode {	
 	    public char currentSymbol;	
 	    public SymbolNode nextSymbol;
@@ -76,7 +76,7 @@ public class FAtoNFA {
 			return top.currentSymbol;
 		}
 	}
-	//NFAջ
+	//NFA栈
 	public class Node {
 	    public NFA currentNFA;
 	    public Node nextNFA;
@@ -233,7 +233,7 @@ public class FAtoNFA {
 	public String Init(String re) throws Exception{
 		String result=new String();
 		if (re.length()==0)
-			throw new inputException("输入不能为空");		
+			throw new inputException("杈撳叆涓嶈兘涓虹┖");		
 		for (int i = 0; i < re.length(); i++) {
 			char c=re.charAt(i);
 			if(IfCaozuofu(c)||IfCaozuoshu(c)) {
@@ -242,7 +242,7 @@ public class FAtoNFA {
 				
 			}
 			else
-				throw new inputException("输入字符不符合要求");	
+				throw new inputException("杈撳叆瀛楃涓嶇鍚堣姹�");	
 		}
 
 		StringBuffer sb = new StringBuffer(); 
@@ -382,10 +382,8 @@ public class FAtoNFA {
 
 	
 	
-	public static String genarateNFA() {
+	public static String genarateNFA(String str) {
 		FAtoNFA tonfa= new FAtoNFA();
-		Scanner input=new Scanner(System.in); 
-		String str=input.next();
 		String result = null;
 		try {
 			result=tonfa.Init(str);
@@ -403,7 +401,7 @@ public class FAtoNFA {
 //		try {
 //			System.out.print(tonfa.Init(str));
 //		} catch (Exception e) {
-//			System.out.println("输入不正确");
+//			System.out.println("杈撳叆涓嶆纭�");
 //			e.printStackTrace();
 //		}		
 //	}

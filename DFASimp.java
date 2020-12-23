@@ -1,3 +1,5 @@
+package tonfa;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -16,6 +18,8 @@ Y Y-a->0 Y-b->1
 */
 
 public class DFASimp {
+	public static String strstr;
+	public static String result =new String();
     int start;
     int anum = 0;
     static int letternum = 1;
@@ -28,13 +32,13 @@ public class DFASimp {
 
 
     public DFASimp() throws IOException {
-        String DFAstr = DFABuildClass.gennarateDFA();
+        String DFAstr = DFABuildClass.gennarateDFA(strstr);
         String a[] = new String[15];
         statue = new ArrayList();
         letterList = new ArrayList();
-        stateChange = new String[10][10];
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+        stateChange = new String[20][20];
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
                 stateChange[i][j] = "z";
             }
         }
@@ -64,10 +68,10 @@ public class DFASimp {
                 stateChange(strArr[t]);
             }
         }
-//        System.out.println("û����֮ǰ��״̬ת�Ʊ�");
+//        System.out.println("没锟斤拷锟斤拷之前锟斤拷状态转锟狡憋拷");
 //        output();
         DFAsimp();
-//        System.out.println("����֮���״̬ת�Ʊ�");
+//        System.out.println("锟斤拷锟斤拷之锟斤拷锟阶刺拷票锟�");
 //        output();
         Outputresult();
     }
@@ -261,19 +265,61 @@ public class DFASimp {
         }
     }
 
-    public static void Outputresult() {
+    public static String Outputresult() {
+    	//System.out.println(letternum);
+    	//System.out.println(statuenum);
+        int x=1;
+    	for(x=1;x<letternum-1;x++)
+    	{
+    		System.out.print(stateChange[0][x]+" ");
+    		result=result+stateChange[0][x]+" ";
+    	}
+    	System.out.print(stateChange[0][x]+"#\n");
+    	result=result+stateChange[0][x];
+    	result=result+"#\n";
+    	
+    	int y=1;
+    	for(y=1;y<statuenum-1;y++)
+    	{
+    		if (stateChange[y][0].equals("z"))
+    			continue;
+		    result=result+stateChange[y][0]+" ";
+		    System.out.print(stateChange[y][0]+" ");
+    	}
+    	if (!stateChange[y][0].equals("z"))
+    	{
+    	System.out.print(stateChange[y][0]+"#\n");
+    	result=result+stateChange[y][0];
+    	result=result+"#\n";
+    	}
+    	if(stateChange[y][0].equals("z"))
+    	{
+    		System.out.print("#\n");
+    		result=result+"#\n";
+    	}
+    		
+    	
         for (int i = 1; i < statuenum; i++) {
             if (stateChange[i][0].equals("z"))
                 continue;
             System.out.print(stateChange[i][0]);
+            result=result+stateChange[i][0];
             for (int j = 1; j < letternum; j++) {
                 if (stateChange[i][j].equals("z"))
                     continue;
                 System.out.print(" " + stateChange[i][0] + "-" + stateChange[0][j] + "->" + stateChange[i][j]);
+                result=result+" " + stateChange[i][0] + "-" + stateChange[0][j] + "->" + stateChange[i][j];
             }
             System.out.println();
+            result=result+"\n";
         }
+        return result;
 
+    }
+    
+    public static String getResult()
+    {
+    	return result;
     }
 
     public static void main(String[] args) throws IOException {
